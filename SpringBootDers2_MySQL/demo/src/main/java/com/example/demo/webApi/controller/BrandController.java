@@ -31,6 +31,7 @@ public class BrandController {
     private final BrandManager brandManager;
 
     @GetMapping(value = "/getAll")
+    @ResponseStatus(code = HttpStatus.OK)
     public List<GetAllBrandsResponse> getAll() {
         return this.brandManager.getAll();
     }

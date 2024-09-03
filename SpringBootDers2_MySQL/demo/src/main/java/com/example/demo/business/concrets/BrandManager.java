@@ -10,6 +10,7 @@ import com.example.demo.business.requests.CreateBrandRequest;
 import com.example.demo.business.requests.UpdateBrandRequest;
 import com.example.demo.business.responses.GetAllBrandsResponse;
 import com.example.demo.business.responses.GetByIdResponse;
+import com.example.demo.business.rules.BrandBusinessRules;
 import com.example.demo.core.utilities.mappers.ModelMapperService;
 import com.example.demo.dataAccess.abstracts.BrandRepository;
 import com.example.demo.entities.concretes.Brand;
@@ -21,11 +22,14 @@ import lombok.AllArgsConstructor;
 public class BrandManager implements BrandService {
     protected final BrandRepository brandRepository;
     protected final ModelMapperService modelMapperService;
+    protected final BrandBusinessRules brandBusinessRules;
     
     @Override
     public void addBrand(CreateBrandRequest createBrandRequest) {
-        Brand brand = this.modelMapperService.forRequestMapper()
-            .map(createBrandRequest, Brand.class);
+
+        brandBusinessRules.checkIfBrandNameExists(createBrandRequest.getName());
+
+        Brand brand = this.modelMapperService.forRequestMapper().map(createBrandRequest, Brand.class);
         this.brandRepository.save(brand);
     }
 
